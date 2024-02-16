@@ -8,21 +8,21 @@ The application receives contact information from Eloqua, evaluates each contact
 
 ### Features
 
-    OAuth2 authentication with Eloqua.
-    Decision service endpoint to process contacts.
-    PostgreSQL database integration for country rules lookup.
-    Modular design for easy maintenance and scalability.
+- OAuth2 authentication with Eloqua.
+- Decision service endpoint to process contacts.
+- PostgreSQL database integration for country rules lookup.
+- Modular design for easy maintenance and scalability.
 
 ### Project Structure
 
-    eloqua_oauth_fastapi.py: Handles OAuth2 authentication flow with Eloqua.
-    models.py: Defines SQLAlchemy models for database interactions.
-    database.py: Configures the database connection and session management.
-    crud.py: Contains CRUD operations for database interaction.
-    schemas.py: Pydantic models for request and response validation.
-    app.py: The core FastAPI application file with the decision service endpoint.
+- eloqua_oauth_fastapi.py: Handles OAuth2 authentication flow with Eloqua.
+- models.py: Defines SQLAlchemy models for database interactions.
+- database.py: Configures the database connection and session management.
+- crud.py: Contains CRUD operations for database interaction.
+- schemas.py: Pydantic models for request and response validation.
+- app.py: The core FastAPI application file with the decision service endpoint.
 
-###Installation
+### Installation
 
 Clone the repository:
 
@@ -50,5 +50,5 @@ This command starts the application on http://localhost:8000. The --reload flag 
 
 ### Usage
 
-    OAuth2 Authentication: Follow the OAuth2 flow to authenticate with Eloqua and access the decision service endpoint.
-    Decision Service Endpoint: Send a POST request to /decision/ with the contact's information in the request body. The application will return the Sync Action based on the country rule.
+- OAuth2 Authentication: Follow the OAuth2 flow to authenticate with Eloqua and access the decision service endpoint.
+- Decision Service Endpoint: Send a POST request to /decision/ with the contact's information in the request body. The application will return the Sync Action based on the country rule.

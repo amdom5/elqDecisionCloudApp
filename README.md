@@ -6,14 +6,10 @@ A comprehensive framework for building Oracle Eloqua AppCloud Decision Services 
 
 - [Overview](#overview)
 - [Quick Start](#quick-start)
-- [Custom Decision Logic](#custom-decision-logic)
-- [Configuration UI](#configuration-ui)
-- [Deployment and Connectivity](#deployment-and-connectivity)
+- [Customization](#customization)
 - [API Reference](#api-reference)
-- [Development](#development)
+- [Deployment and Connectivity](#deployment-and-connectivity)
 - [Examples](#examples)
-- [Troubleshooting](#troubleshooting)
-- [Contributing](#contributing)
 
 ## Overview
 
@@ -22,9 +18,8 @@ A comprehensive framework for building Oracle Eloqua AppCloud Decision Services 
 - **Complete Eloqua AppCloud Integration**: Implements all required endpoints (Create, Configure, Notify, Delete)
 - **OAuth 1.0a Authentication**: Proper Eloqua API authentication with signature verification
 - **Bulk API Integration**: Asynchronous decision processing using Eloqua's Bulk API
-- **Professional Configuration UI**: Modern interface inspired by Oracle Redwood Experience
+- **Customizable Config UI**: Modern interface inspired by Oracle Redwood Experience
 - **Extensible Framework**: Easy-to-extend base classes for custom decision logic
-- **Administrative Endpoints**: Health check and service instance management endpoints
 
 ### Architecture
 
@@ -124,7 +119,7 @@ Once your application is deployed (see [Deployment section](#deployment-and-conn
 - Must use HTTPS (secure connection)
 - Replace `your-domain.com` with your actual domain name where you deployed the application
 
-## Custom Decision Logic
+## Customization
 
 ### Extending the Framework
 
@@ -173,25 +168,7 @@ decision_service: DecisionServiceBase = SimpleEmailValidationService()
 decision_service: DecisionServiceBase = MyCustomDecisionService()
 ```
 
-## Configuration UI
-
-The framework provides professional, production-ready configuration interfaces:
-
-### Default Configuration UI
-- Modern Bootstrap 5 design with responsive layout
-- Service status controls and timeout settings
-- Debug mode toggle and configuration notes
-- Real-time form validation and user feedback
-- Professional navigation with tabs for Config, Stats, Help, and Support
-
-### Email Validation Configuration UI
-- Specialized interface for email validation rules
-- Domain validation controls and blocked domain management
-- Live preview of validation rules
-- Real-time email testing functionality
-- Visual feedback and error handling
-
-### Customizing Configuration UI
+### Customizing the Configuration UI
 
 Override the `get_configuration_ui()` method in your decision service:
 
@@ -241,34 +218,6 @@ from config import get_settings
 settings = get_settings()
 settings.requires_configuration = True
 settings.max_records_per_notification = 500
-```
-
-## Development
-
-### Running Tests
-
-```bash
-# Install development dependencies
-pip install -r requirements-dev.txt
-
-# Run tests
-pytest
-
-# Run with coverage
-pytest --cov=.
-```
-
-### Code Quality
-
-```bash
-# Format code
-black .
-
-# Check linting
-flake8 .
-
-# Type checking
-mypy .
 ```
 
 ## Deployment and Connectivity
@@ -345,34 +294,6 @@ CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000"]
 5. **Scaling**: Use multiple workers for high-volume deployments
 6. **Storage**: Consider Redis or database for persistent service instance storage
 
-## Troubleshooting
-
-### Common Issues
-
-**OAuth Signature Verification Fails**
-- Verify consumer key and secret are correct
-- Check that system time is synchronized
-- Ensure URLs match exactly with Eloqua registration
-
-**Contacts Not Processing**
-- Check notification URL is accessible from Eloqua
-- Verify record definition matches contact data
-- Review logs for processing errors
-
-**Configuration UI Not Loading**
-- Ensure X-Frame-Options is not set to DENY
-- Check JavaScript console for errors
-- Verify configure URL parameters
-
-### Debug Mode
-
-Enable debug logging:
-
-```env
-LOG_LEVEL=DEBUG
-ENABLE_DEBUG=true
-```
-
 ## Examples
 
 The framework includes a complete email validation example (`SimpleEmailValidationService`) that demonstrates:
@@ -382,22 +303,3 @@ The framework includes a complete email validation example (`SimpleEmailValidati
 - Field validation
 - Error handling
 - Real-time testing capabilities
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests
-5. Submit a pull request
-
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-## Support
-
-For issues and questions:
-- Check the troubleshooting section
-- Review Eloqua AppCloud documentation
-- Open an issue in the repository

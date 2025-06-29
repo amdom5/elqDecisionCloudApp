@@ -2,19 +2,33 @@
 
 A comprehensive framework for building Oracle Eloqua AppCloud Decision Services using FastAPI. This framework handles all the complexity of Eloqua AppCloud integration while providing a simple, extensible interface for implementing custom decision logic.
 
-## Features
+## Table of Contents
+
+- [Overview](#overview)
+- [Quick Start](#quick-start)
+- [Custom Decision Logic](#custom-decision-logic)
+- [Configuration UI](#configuration-ui)
+- [Deployment and Connectivity](#deployment-and-connectivity)
+- [API Reference](#api-reference)
+- [Development](#development)
+- [Examples](#examples)
+- [Troubleshooting](#troubleshooting)
+- [Contributing](#contributing)
+
+## Overview
+
+### Features
 
 - **Complete Eloqua AppCloud Integration**: Implements all required endpoints (Create, Configure, Notify, Delete)
 - **OAuth 1.0a Authentication**: Proper Eloqua API authentication with signature verification
 - **Bulk API Integration**: Asynchronous decision processing using Eloqua's Bulk API
-- **Professional Configuration UI**: Modern Bootstrap 5-based configuration interface with real-time validation
+- **Professional Configuration UI**: Modern interface inspired by Oracle Redwood Experience
 - **Extensible Framework**: Easy-to-extend base classes for custom decision logic
-- **Configuration Management**: Environment-based configuration with validation
-- **Production Ready**: Logging, error handling, and monitoring endpoints included
+- **Administrative Endpoints**: Health check and service instance management endpoints
 
-## Architecture
+### Architecture
 
-### Framework Components
+#### Framework Components
 
 - **`app.py`**: Core FastAPI application with Eloqua AppCloud endpoints
 - **`decision_service_base.py`**: Abstract base class for implementing decision logic
@@ -23,7 +37,7 @@ A comprehensive framework for building Oracle Eloqua AppCloud Decision Services 
 - **`config.py`**: Configuration management and environment handling
 - **`schemas.py`**: Pydantic models for data validation
 
-### Eloqua AppCloud Flow
+#### Eloqua AppCloud Flow
 
 1. **Service Creation**: When dragged onto canvas, Eloqua calls Create URL
 2. **Configuration**: Marketers configure the service via Configure URL
@@ -33,23 +47,38 @@ A comprehensive framework for building Oracle Eloqua AppCloud Decision Services 
 
 ## Quick Start
 
+### Prerequisites
+
+Before you begin, make sure you have the following installed on your computer:
+
+- **Python 3.8 or higher**: This application is built with Python. Download from [python.org](https://www.python.org/downloads/)
+- **Git**: For downloading the code. Download from [git-scm.com](https://git-scm.com/downloads)
+- **Eloqua OAuth Credentials**: You'll need consumer key and secret from your Eloqua instance
+
 ### 1. Installation
 
-```bash
-# Clone the repository
-git clone https://github.com/your-repo/eloqua-decision-framework.git
-cd eloqua-decision-framework
+Download and set up the application:
 
-# Install dependencies
+```bash
+# Download the code from GitHub
+git clone https://github.com/amdom5/elqDecisionCloudApp.git
+cd elqDecisionCloudApp
+
+# Install required Python packages
 pip install -r requirements.txt
 
-# Copy environment configuration
+# Create your configuration file
 cp .env.example .env
 ```
 
+**What this does:**
+- Downloads the application code to your computer
+- Installs all the Python libraries the application needs
+- Creates a configuration file where you'll add your Eloqua credentials
+
 ### 2. Configuration
 
-Edit the `.env` file with your Eloqua OAuth credentials:
+Open the `.env` file (created in step 1) in any text editor and add your Eloqua credentials:
 
 ```env
 ELOQUA_CONSUMER_KEY=your_consumer_key_here
@@ -58,22 +87,42 @@ SERVICE_NAME=My Decision Service
 ENABLE_OAUTH_VERIFICATION=true
 ```
 
-### 3. Run the Application
+**Where to find your Eloqua credentials:**
+- Log into your Eloqua instance
+- Go to Settings → Integration → App Management
+- Find your OAuth application and copy the Consumer Key and Consumer Secret
+- Replace `your_consumer_key_here` and `your_consumer_secret_here` with your actual values
+
+### 3. Running the Application Locally
+
+Start the application on your computer for testing:
 
 ```bash
 uvicorn app:app --host 0.0.0.0 --port 8000
 ```
 
-The service will be available at `http://localhost:8000`
+The service will be running at `http://localhost:8000` (you can open this in your web browser to test)
+
+**Important:** When running locally, Eloqua cannot reach your application. This is only for development and testing. See the [Deployment and Connectivity](#deployment-and-connectivity) section to learn how to make it accessible to Eloqua.
 
 ### 4. Register with Eloqua
 
-In your Eloqua instance, register a new Decision Service with these URLs:
+Once your application is deployed (see [Deployment section](#deployment-and-connectivity)), register it as a Decision Service in Eloqua:
+
+**In your Eloqua instance:**
+1. Go to Settings → Integration → Decision Services
+2. Click "Add New Decision Service"
+3. Enter these URLs (replace `your-domain.com` with your actual website domain):
 
 - **Create URL**: `https://your-domain.com/decision/create?instanceId={InstanceId}&installId={InstallId}`
 - **Configure URL**: `https://your-domain.com/decision/configure?instanceId={InstanceId}`
 - **Notification URL**: `https://your-domain.com/decision/notify?instanceId={InstanceId}&executionId={ExecutionId}`
 - **Delete URL**: `https://your-domain.com/decision/delete?instanceId={InstanceId}`
+
+**Important:** 
+- These URLs must be publicly accessible on the internet (not localhost)
+- Must use HTTPS (secure connection)
+- Replace `your-domain.com` with your actual domain name where you deployed the application
 
 ## Custom Decision Logic
 
@@ -124,6 +173,35 @@ decision_service: DecisionServiceBase = SimpleEmailValidationService()
 decision_service: DecisionServiceBase = MyCustomDecisionService()
 ```
 
+## Configuration UI
+
+The framework provides professional, production-ready configuration interfaces:
+
+### Default Configuration UI
+- Modern Bootstrap 5 design with responsive layout
+- Service status controls and timeout settings
+- Debug mode toggle and configuration notes
+- Real-time form validation and user feedback
+- Professional navigation with tabs for Config, Stats, Help, and Support
+
+### Email Validation Configuration UI
+- Specialized interface for email validation rules
+- Domain validation controls and blocked domain management
+- Live preview of validation rules
+- Real-time email testing functionality
+- Visual feedback and error handling
+
+### Customizing Configuration UI
+
+Override the `get_configuration_ui()` method in your decision service:
+
+```python
+class MyDecisionService(DecisionServiceBase):
+    def get_configuration_ui(self, instance_id: str, instance_config: Dict[str, Any]) -> str:
+        # Return your custom HTML configuration interface
+        return self._get_default_configuration_ui(instance_id, instance_config)
+```
+
 ## API Reference
 
 ### Core Endpoints
@@ -134,15 +212,15 @@ decision_service: DecisionServiceBase = MyCustomDecisionService()
 - `POST /decision/notify` - Process contact notifications
 - `DELETE /decision/delete` - Delete service instance
 
-### Monitoring Endpoints
+### Administrative Endpoints
 
 - `GET /health` - Health check
 - `GET /config/instances` - List service instances
 - `GET /config/settings` - View service settings
 
-## Configuration Options
+### Configuration Options
 
-### Environment Variables
+#### Environment Variables
 
 | Variable | Description | Default |
 |----------|-------------|---------|
@@ -153,7 +231,7 @@ decision_service: DecisionServiceBase = MyCustomDecisionService()
 | `MAX_RECORDS_PER_NOTIFICATION` | Max contacts per batch | 1000 |
 | `LOG_LEVEL` | Logging level | INFO |
 
-### Service Settings
+#### Service Settings
 
 Configure decision service behavior:
 
@@ -193,7 +271,55 @@ flake8 .
 mypy .
 ```
 
-## Deployment
+## Deployment and Connectivity
+
+### Local Development vs Production
+
+When running locally with `uvicorn app:app --host 0.0.0.0 --port 8000`, your service is only accessible from your local machine at `http://localhost:8000`. **Eloqua cannot reach your local development server** because:
+
+1. **Network Isolation**: Your local machine is behind a router/firewall
+2. **Private IP**: Localhost (127.0.0.1) is not accessible from the internet
+3. **HTTP vs HTTPS**: Eloqua requires HTTPS, but local development typically uses HTTP
+
+### Making Your Service Accessible to Eloqua
+
+To connect your locally running service to Eloqua, you need to make it publicly accessible. Here are the main approaches:
+
+#### Option 1: Cloud Deployment (Recommended)
+Deploy your service to a cloud platform with a public domain:
+
+- **AWS**: Use EC2, ECS, or Lambda with Application Load Balancer
+- **Google Cloud**: Use Cloud Run, Compute Engine, or App Engine
+- **Azure**: Use Container Instances, App Service, or Virtual Machines
+- **DigitalOcean**: Use Droplets or App Platform
+- **Heroku**: Use web dynos with custom domains
+
+#### Option 2: Tunneling Services (Development/Testing)
+Use a tunneling service to expose your local server:
+
+- **ngrok**: `ngrok http 8000` creates a public HTTPS URL
+- **Cloudflare Tunnel**: Free tunneling with custom domains
+- **LocalTunnel**: `npx localtunnel --port 8000` for temporary access
+
+#### Option 3: VPS/Dedicated Server
+Deploy to a Virtual Private Server with a public IP address and domain name.
+
+### URL Configuration Requirements
+
+The URLs you register with Eloqua must be:
+
+1. **Publicly Accessible**: Reachable from Eloqua's servers on the internet
+2. **HTTPS Only**: SSL/TLS certificate required (HTTP will be rejected)
+3. **Proper Domain**: Replace `your-domain.com` with your actual domain name
+4. **Correct Endpoints**: Must match the exact paths defined in your FastAPI app
+
+**Example with real domain:**
+```
+- Create URL: https://api.mycompany.com/decision/create?instanceId={InstanceId}&installId={InstallId}
+- Configure URL: https://api.mycompany.com/decision/configure?instanceId={InstanceId}
+- Notification URL: https://api.mycompany.com/decision/notify?instanceId={InstanceId}&executionId={ExecutionId}
+- Delete URL: https://api.mycompany.com/decision/delete?instanceId={InstanceId}
+```
 
 ### Docker Deployment
 
@@ -210,7 +336,7 @@ EXPOSE 8000
 CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000"]
 ```
 
-### Production Considerations
+#### Production Considerations
 
 1. **HTTPS Required**: Eloqua requires SSL/TLS for all endpoints
 2. **OAuth Verification**: Keep OAuth verification enabled in production
@@ -245,35 +371,6 @@ Enable debug logging:
 ```env
 LOG_LEVEL=DEBUG
 ENABLE_DEBUG=true
-```
-
-## Configuration UI
-
-The framework provides professional, production-ready configuration interfaces:
-
-### Default Configuration UI
-- Modern Bootstrap 5 design with responsive layout
-- Service status controls and timeout settings
-- Debug mode toggle and configuration notes
-- Real-time form validation and user feedback
-- Professional navigation with tabs for Config, Stats, Help, and Support
-
-### Email Validation Configuration UI
-- Specialized interface for email validation rules
-- Domain validation controls and blocked domain management
-- Live preview of validation rules
-- Real-time email testing functionality
-- Visual feedback and error handling
-
-### Customizing Configuration UI
-
-Override the `get_configuration_ui()` method in your decision service:
-
-```python
-class MyDecisionService(DecisionServiceBase):
-    def get_configuration_ui(self, instance_id: str, instance_config: Dict[str, Any]) -> str:
-        # Return your custom HTML configuration interface
-        return self._get_default_configuration_ui(instance_id, instance_config)
 ```
 
 ## Examples

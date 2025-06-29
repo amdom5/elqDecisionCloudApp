@@ -1,0 +1,38 @@
+# Core Framework Dependencies
+fastapi>=0.104.0
+uvicorn>=0.24.0
+pydantic>=2.0.0
+pydantic-settings>=2.0.0
+
+# HTTP Client for Eloqua API calls
+aiohttp>=3.9.0
+requests>=2.31.0
+
+# Environment and Configuration
+python-dotenv>=1.0.0
+
+# Optional Dependencies for Extended Features
+
+# Redis support (uncomment if using Redis for service instance storage)
+# redis>=5.0.0
+# aioredis>=2.0.0
+
+# Database support (uncomment if using database for service instance storage)
+# sqlalchemy>=2.0.0
+# alembic>=1.12.0
+
+# PostgreSQL driver (if using PostgreSQL)
+# psycopg2-binary>=2.9.0
+
+# MySQL driver (if using MySQL)
+# PyMySQL>=1.1.0
+
+# SQLite is included with Python by default
+
+# Development Dependencies (install with pip install -r requirements-dev.txt)
+# pytest>=7.4.0
+# pytest-asyncio>=0.21.0
+# httpx>=0.25.0  # For testing async HTTP endpoints
+# black>=23.0.0  # Code formatting
+# flake8>=6.0.0  # Linting
+# mypy>=1.5.0    # Type checking

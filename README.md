@@ -1,4 +1,4 @@
-# Eloqua Decision Service Cloud App Framework
+# Eloqua AppCloud Decision Service Framework
 
 A comprehensive framework for building Oracle Eloqua AppCloud Decision Services using FastAPI. This framework handles all the complexity of Eloqua AppCloud integration while providing a simple, extensible interface for implementing custom decision logic.
 
